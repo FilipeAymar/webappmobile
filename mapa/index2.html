@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lojas AppleAssist</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+
+    <style>
+        #map {
+            height: 100vh;
+            width: 100%;
+        }
+    </style>
+
+</head>
+<body>
+    <div id="map"></div>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+    <script>
+        var map = L.map('map').setView([-8.047562, -34.877002], 13);
+        
+        // Define as coordenadas de Recife
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+        }).addTo(map);
+
+        // Adicione um marcador para a localização do usuário
+        navigator.geolocation.getCurrentPosition(function (position) {
+            var userLat = position.coords.latitude;
+            var userLng = position.coords.longitude;
+            L.marker([userLat, userLng]).addTo(map)
+                .bindPopup('Sua Localização Atual')
+                .openPopup();
+        });
+
+        // Adicione marcadores para pontos pré-cadastrados em Recife
+        var points = [
+            { name: "Madalena", latlng: [-8.05308, -34.9034] },
+            { name: "Pina", latlng: [-8.10283, -34.88784] },
+            { name: "Parnamirim", latlng: [-8.03115, -34.90576] }
+        ];
+
+        points.forEach(function (point) {
+            L.marker(point.latlng).addTo(map).bindPopup(point.name);
+        });
+
+        // Atualize o tamanho do mapa quando a janela for redimensionada
+        window.addEventListener('resize', function () {
+            map.invalidateSize();
+        });
+    </script>
+
+</body>
+</html>
